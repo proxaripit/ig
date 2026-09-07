@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Последний этаж — Глава 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=PT+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="stage">
+  <div id="bg-a" class="bg"></div>
+  <div id="bg-b" class="bg"></div>
+  <div class="vignette"></div>
+  <div class="grain"></div>
+
+  <div id="inventory"></div>
+  <div id="caseLabel">ДЕЛО №12 · ГЛАВА 4</div>
+
+  <div id="dialogue"><div id="dialogue-panel"><div id="portraitFrame"><img id="portrait" src="" alt=""></div><div id="speaker"></div><div id="text"></div><div id="continue-hint">▶</div></div></div>
+  <div id="floorled"><div class="num" id="floorNum">1</div><div class="flabel" id="floorLabel">ЭТАЖ</div></div>
+  <div id="sms"><div class="from" id="smsFrom"></div><div class="txt" id="smsTxt"></div></div>
+
+  <div id="titlecard"><div class="tc-main" id="tcMain"></div><div class="tc-sub" id="tcSub"></div></div>
+
+  <div id="itemModal"><img id="itemImg" src="" alt=""><div class="cap" id="itemCap"></div><div class="hint">нажмите, чтобы продолжить</div></div>
+
+  <div id="choices"><div class="prompt" id="choicePrompt"></div><div id="choiceList"></div></div>
+
+  <!-- Clock puzzle -->
+  <div class="puzzle" id="clockPuzzle">
+    <h3>СТАРЫЕ ЧАСЫ</h3>
+    <div class="desc">Стрелки остановились. Похоже, если выставить точное время — что-то сработает.</div>
+    <div class="clockface"><div class="hand hour" id="cpHour"></div><div class="hand minute" id="cpMinute"></div><div class="pin"></div></div>
+    <div class="timerow">
+      <div class="box"><button id="hUp">▲</button><div class="val" id="hVal">00</div><button id="hDown">▼</button></div>
+      <div class="colon">:</div>
+      <div class="box"><button id="mUp">▲</button><div class="val" id="mVal">00</div><button id="mDown">▼</button></div>
+    </div>
+    <button class="confirm" id="cpConfirm">Выставить</button>
+    <div class="msg" id="cpMsg"></div>
+  </div>
+
+  <!-- Code puzzle: find items -->
+  <div class="puzzle" id="findPuzzle">
+    <h3>ФОТОГРАФИЯ КОРИДОРА</h3>
+    <div class="desc">На фото — четыре двери. Над каждой предмет с цифрой. Найдите все.</div>
+    <div class="findgrid" id="findGrid"></div>
+    <div class="msg good" id="findMsg"></div>
+  </div>
+
+  <!-- Code puzzle: enter code -->
+  <div class="puzzle" id="codePuzzle">
+    <h3>ПАНЕЛЬ ВОЗЛЕ ЛИФТА</h3>
+    <div class="desc">Введите код, собранный по этажам.</div>
+    <div class="codewheels" id="codeWheels"></div>
+    <button class="confirm" id="codeConfirm">Ввести</button>
+    <div class="msg" id="codeMsg"></div>
+  </div>
+
+  <!-- Sequence puzzle: правильный порядок действий -->
+  <div class="puzzle" id="sequencePuzzle">
+    <h3>ПОЖАРНЫЙ ЩИТ</h3>
+    <div class="desc">Нажимайте по порядку. Ошиблись — начинаете заново.</div>
+    <div class="seqgrid" id="seqGrid"></div>
+    <div class="msg" id="seqMsg"></div>
+  </div>
+
+  <div id="nameGate">
+    <h2>Последний этаж</h2>
+    <p>как вас зовут?</p>
+    <input id="nameInput" type="text" placeholder="Ваше имя" maxlength="18">
+    <button id="nameConfirm">В путь</button>
+  </div>
+
+  <div id="startScreen">
+    <h1>Глава 4</h1>
+    <div class="sub">«Плёнки Никиты»</div>
+    <button id="startBtn">Начать</button>
+    <a href="index.html" style="display:block;margin-top:18px;font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:#546058;text-decoration:none;">← в меню</a>
+  </div>
+</div>
+
+<script src="assets.js"></script>
+<script src="bgresolver.js"></script>
+<script src="data/helpers.js"></script>
+<script src="data/chapter4.js"></script>
+<script>const SCRIPT = CHAPTER4; const CHAPTER_NUMBER = 4;</script>
+<script src="engine.js"></script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Последний этаж</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=PT+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+<div id="menu">
+  <div class="menu-bg-blur" id="menuBgBlur"></div>
+  <div class="menu-bg-frame" id="menuBgFrame"></div>
+  <div class="menu-vignette"></div>
+
+  <div class="menu-inner">
+    <div class="topbar">
+      <div class="hamburger" id="hamburger" title="меню">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="#cdd6cd" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <div class="case-stamp">ДЕЛО #12 — НЕ ЗАКРЫТО</div>
+      <div class="sound-toggle" id="soundToggle" title="звук">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M4 9v6h4l5 5V4L8 9H4z" stroke="#8a978d" stroke-width="1.6" stroke-linejoin="round"/>
+          <path class="wave" d="M16.5 8.5c1.6 1.9 1.6 5.1 0 7" stroke="#8a978d" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="hero">
+      <h1>Последний<br>этаж</h1>
+      <div class="sub">дом, в котором 11 этажей. официально.</div>
+    </div>
+
+    <div class="main-row">
+      <div class="nav-list" id="navList">
+        <div class="nav-close" id="navClose">✕</div>
+        <button class="nav-item active" id="navContinue">
+          <span class="nav-left">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4l14 8-14 8V4z" fill="#d3a24c"/></svg></span>
+            <span>
+              <span class="nav-text">Продолжить</span>
+              <span class="nav-caption">Глава 1 · 12-й этаж</span>
+            </span>
+          </span>
+          <span class="chevron">›</span>
+        </button>
+        <button class="nav-item" id="navChars">
+          <span class="nav-left">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="#d3a24c" stroke-width="1.6"/><path d="M5 20c1-4 4.5-6 7-6s6 2 7 6" stroke="#d3a24c" stroke-width="1.6"/></svg></span>
+            <span class="nav-text">Персонажи</span>
+          </span>
+          <span class="chevron">›</span>
+        </button>
+        <button class="nav-item" id="navSettings">
+          <span class="nav-left">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="#d3a24c" stroke-width="1.6"/><path d="M12 3v2.4M12 18.6V21M3 12h2.4M18.6 12H21M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M18.4 5.6l-1.7 1.7M7.3 16.7l-1.7 1.7" stroke="#d3a24c" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+            <span class="nav-text">Настройки</span>
+          </span>
+          <span class="chevron">›</span>
+        </button>
+        <button class="nav-item" id="navAbout">
+          <span class="nav-left">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#d3a24c" stroke-width="1.6"/><path d="M12 11v5.5M12 7.6v.1" stroke="#d3a24c" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="nav-text">Об игре</span>
+          </span>
+          <span class="chevron">›</span>
+        </button>
+        <button class="nav-item" id="navExit">
+          <span class="nav-left">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M9 4H5v16h4M15 8l4 4-4 4M9 12h10" stroke="#d3a24c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="nav-text">Выйти</span>
+          </span>
+          <span class="chevron">›</span>
+        </button>
+      </div>
+
+      <div class="nav-backdrop" id="navBackdrop"></div>
+
+      <div class="elevator-widget">
+        <div class="led-readout" id="ledReadout">11</div>
+        <div class="floor-grid" id="floorGrid"></div>
+        <button class="floor-12-btn" id="floor12Btn">12</button>
+        <button class="call-btn" id="callBtn">Вызвать лифт</button>
+        <div class="ew-hint">или выберите этаж на панели</div>
+      </div>
+
+      <div class="sticky-note">Если видишь 12-й этаж — не заходи туда.</div>
+
+      <div class="social-row">
+        <a title="ВКонтакте (скоро)">VK</a>
+        <a title="Достижения (скоро)">🎮</a>
+        <a title="Оценить игру (скоро)">★</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Overlays -->
+<div class="overlay" id="charsOverlay">
+  <div class="overlay-inner">
+    <button class="back-btn" data-close>← назад в меню</button>
+    <h2>Жильцы дома</h2>
+    <div class="ov-sub">СОБРАНО ПО КРУПИЦАМ</div>
+    <div class="char-cards" id="charCards"></div>
+  </div>
+</div>
+
+<div class="overlay" id="settingsOverlay">
+  <div class="overlay-inner">
+    <button class="back-btn" data-close>← назад в меню</button>
+    <h2>Настройки</h2>
+    <div class="ov-sub">ГЛАВА 1</div>
+    <div class="settings-row"><span>Звук</span><span id="settingsSoundState">выключен</span></div>
+    <div class="settings-row"><span>Язык</span><span>русский</span></div>
+  </div>
+</div>
+
+<div class="overlay" id="aboutOverlay">
+  <div class="overlay-inner">
+    <button class="back-btn" data-close>← назад в меню</button>
+    <h2>Об игре</h2>
+    <div class="ov-sub">СЮЖЕТНОЕ ПРИКЛЮЧЕНИЕ · ГОЛОВОЛОМКИ</div>
+    <p class="about-text">Герой приезжает в старый дом, чтобы забрать вещи пропавшего дяди. Но в доме официально 11 этажей — а лифт иногда показывает кнопку «12».</p>
+    <p class="about-text">Расследуйте, решайте головоломки и узнайте, что произошло в этом доме 17 сентября 1998 года.</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets.js"></script>
+<script src="bgresolver.js"></script>
+<script src="menu.js"></script>
+</body>
+</html>
