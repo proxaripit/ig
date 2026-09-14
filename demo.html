@@ -41,6 +41,7 @@
     </div>
     <button class="confirm" id="cpConfirm">Выставить</button>
     <div class="msg" id="cpMsg"></div>
+    <div class="answer-peek" id="clockAnswerPeek"></div>
   </div>
 
   <!-- Code puzzle: find items -->
@@ -49,6 +50,7 @@
     <div class="desc">На фото — четыре двери. Над каждой предмет с цифрой. Найдите все.</div>
     <div class="findgrid" id="findGrid"></div>
     <div class="msg good" id="findMsg"></div>
+    <div class="answer-peek">ответ: 9-7-4-2</div>
   </div>
 
   <!-- Code puzzle: enter code -->
@@ -58,6 +60,7 @@
     <div class="codewheels" id="codeWheels"></div>
     <button class="confirm" id="codeConfirm">Ввести</button>
     <div class="msg" id="codeMsg"></div>
+    <div class="answer-peek" id="codeAnswerPeek"></div>
   </div>
 
   <!-- Sequence puzzle: правильный порядок действий -->
@@ -66,6 +69,16 @@
     <div class="desc">Нажимайте по порядку. Ошиблись — начинаете заново.</div>
     <div class="seqgrid" id="seqGrid"></div>
     <div class="msg" id="seqMsg"></div>
+    <div class="answer-peek" id="seqAnswerPeek"></div>
+  </div>
+
+  <div id="resumeGate" class="hide">
+    <h2>С возвращением</h2>
+    <p id="resumeSub"></p>
+    <div class="resume-row">
+      <button id="resumeContinue">Продолжить</button>
+      <button id="resumeRestart">Начать главу заново</button>
+    </div>
   </div>
 
   <div id="nameGate">

@@ -138,7 +138,10 @@ function render(node){
         b.onclick = ()=>{
           el('choices').classList.remove('show');
           if(opt.effect) opt.effect(); // необязательный эффект на состояние (v2-механика)
-          branchQueue = opt.lines.slice();
+          // Та же логика, что у IFFLAG/condition: ВСТАВЛЯЕМ ответ в начало
+          // очереди, а не заменяем её — на случай если CHOICE стоит внутри
+          // другого списка и после него ещё что-то должно сыграть.
+          branchQueue = opt.lines.slice().concat(branchQueue || []);
           const n = branchQueue.shift();
           if(n) render(n); else advance();
         };
@@ -148,7 +151,7 @@ function render(node){
       break;
     case 'clockpuzzle':
       hideOverlays();
-      initClockPuzzle();
+      initClockPuzzle(node.hour, node.minute);
       el('clockPuzzle').classList.add('show');
       break;
     case 'finditems':
@@ -208,6 +211,7 @@ function render(node){
     case 'end':
       hideOverlays();
       saveProgress();
+      clearMidProgress(); // глава пройдена — сохранённое "место внутри главы" больше не нужно
       el('tcMain').textContent = node.text;
       el('tcSub').innerHTML = (node.sub||'') + (node.tail ? `<br><br><span style="font-style:italic;color:#8a9a8f">${node.tail}</span>` : '');
       renderEndNext(node);
@@ -248,7 +252,7 @@ function advance(){
     branchQueue = null;
   }
   idx++;
-  if(idx < SCRIPT.length) render(SCRIPT[idx]);
+  if(idx < SCRIPT.length){ render(SCRIPT[idx]); saveMidProgress(); }
 }
 
 /* click-to-continue zones */
@@ -258,7 +262,7 @@ el('sms').onclick = ()=>{ if(current && current.type==='sms') advance(); };
 el('itemModal').onclick = ()=>{ if(current && current.type==='item') advance(); };
 
 /* ===================== Clock puzzle ===================== */
-let cpHour=0, cpMinute=0;
+let cpHour=0, cpMinute=0, cpTargetHour=21, cpTargetMinute=17;
 function updateClockVisual(){
   el('hVal').textContent = String(cpHour).padStart(2,'0');
   el('mVal').textContent = String(cpMinute).padStart(2,'0');
@@ -267,8 +271,12 @@ function updateClockVisual(){
   el('cpHour').style.transform = `rotate(${hourAngle}deg)`;
   el('cpMinute').style.transform = `rotate(${minAngle}deg)`;
 }
-function initClockPuzzle(){
+function initClockPuzzle(hour, minute){
+  cpTargetHour = (hour===undefined?21:hour);
+  cpTargetMinute = (minute===undefined?17:minute);
   cpHour=0; cpMinute=0; el('cpMsg').textContent=''; el('cpMsg').className='msg';
+  const peek = el('clockAnswerPeek');
+  if(peek) peek.textContent = 'ответ: ' + String(cpTargetHour).padStart(2,'0')+':'+String(cpTargetMinute).padStart(2,'0');
   updateClockVisual();
 }
 el('hUp').onclick=()=>{ cpHour=(cpHour+1)%24; updateClockVisual(); };
@@ -276,7 +284,7 @@ el('hDown').onclick=()=>{ cpHour=(cpHour+23)%24; updateClockVisual(); };
 el('mUp').onclick=()=>{ cpMinute=(cpMinute+1)%60; updateClockVisual(); };
 el('mDown').onclick=()=>{ cpMinute=(cpMinute+59)%60; updateClockVisual(); };
 el('cpConfirm').onclick=()=>{
-  if(cpHour===21 && cpMinute===17){
+  if(cpHour===cpTargetHour && cpMinute===cpTargetMinute){
     el('cpMsg').className='msg good';
     el('cpMsg').textContent='Что-то щёлкнуло внутри...';
     setTimeout(advance, 900);
@@ -343,6 +351,8 @@ function initCodePuzzle(target){
                                        // в главе 4 код трёхзначный, не всегда 4
   el('codeMsg').textContent='';
   el('codeMsg').className='msg';
+  const peek = el('codeAnswerPeek');
+  if(peek) peek.textContent = 'ответ: ' + codeTarget.join('-');
   renderCodeWheels();
 }
 el('codeConfirm').onclick=()=>{
@@ -364,6 +374,11 @@ function initSequencePuzzle(steps){
   seqSteps = steps;
   seqProgress = 0;
   el('seqMsg').textContent = '';
+  const peek = el('seqAnswerPeek');
+  if(peek){
+    const short = steps.map(s => s.length > 22 ? s.slice(0,22)+'…' : s);
+    peek.textContent = 'порядок: ' + short.join(' → ');
+  }
   const grid = el('seqGrid');
   grid.innerHTML = '';
   // порядок кнопок на экране перемешан — иначе "угадывать" нечего
@@ -394,6 +409,32 @@ function initSequencePuzzle(steps){
   });
 }
 
+/* ===================== Прогресс внутри главы (сохранение/восстановление) =====================
+   Отдельная штука от pe-progress (номер главы) и pe-v2-state (флаги
+   доверия). Здесь — точное место ВНУТРИ текущей главы: индекс сцены,
+   какой фон был активен, что уже собрано в инвентарь. Главы стали
+   длинными (по 2500-3000 слов с несколькими головоломками), так что
+   терять место при перезагрузке страницы стало по-настоящему неудобно. */
+const SAVE_KEY = 'pe-save-ch' + (typeof CHAPTER_NUMBER !== 'undefined' ? CHAPTER_NUMBER : '0');
+
+function saveMidProgress(){
+  if (branchQueue) return; // сохраняем только "чистые" точки, не посреди ветки выбора/пазла
+  try{
+    localStorage.setItem(SAVE_KEY, JSON.stringify({
+      idx, name: playerName, bg: currentBgName, inv: Array.from(collected),
+    }));
+  } catch(e){}
+}
+function loadMidProgress(){
+  try{
+    const raw = localStorage.getItem(SAVE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e){ return null; }
+}
+function clearMidProgress(){
+  try{ localStorage.removeItem(SAVE_KEY); } catch(e){}
+}
+
 /* ===================== Start / name gate ===================== */
 // Имя, once введённое, помним между главами — во второй и далее
 // не переспрашиваем.
@@ -403,9 +444,37 @@ function getSavedName(){
 function saveName(name){
   try{ localStorage.setItem('pe-player-name', name); } catch(e){ /* недоступно — не критично */ }
 }
-function beginChapter(){
+function startFresh(){
+  clearMidProgress();
   idx = 0;
   render(SCRIPT[0]);
+}
+function resumeFrom(saved){
+  if(saved.bg){
+    currentBgName = saved.bg;
+    bgResolve(saved.bg, (url)=>{
+      const activeEl = el(bgActive==='a'?'bg-a':'bg-b');
+      activeEl.style.setProperty('--img', `url(${url})`);
+      activeEl.classList.add('active');
+    });
+  }
+  (saved.inv || []).forEach(addInventory);
+  idx = saved.idx;
+  render(SCRIPT[idx]);
+}
+function beginChapter(){
+  const saved = loadMidProgress();
+  // Предлагаем продолжить, только если это реально другое место, а не
+  // самое начало и не последняя нода (глава уже пройдена).
+  if(saved && typeof saved.idx === 'number' && saved.idx > 0 && saved.idx < SCRIPT.length - 1){
+    const pct = Math.round((saved.idx / SCRIPT.length) * 100);
+    el('resumeSub').textContent = `Похоже, вы остановились примерно на ${pct}% главы.`;
+    el('resumeGate').classList.remove('hide');
+    el('resumeContinue').onclick = ()=>{ el('resumeGate').classList.add('hide'); resumeFrom(saved); };
+    el('resumeRestart').onclick = ()=>{ el('resumeGate').classList.add('hide'); startFresh(); };
+    return;
+  }
+  startFresh();
 }
 el('startBtn').onclick = ()=>{
   el('startScreen').classList.add('hide');

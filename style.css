@@ -94,6 +94,17 @@ html,body{ margin:0; padding:0; width:100%; height:100%; background:#000; color:
 #nameGate input{ background:#12160f; border:1px solid #2c3630; color:var(--paper); font-family:var(--font-mono); font-size:15px; padding:12px 16px; width:min(320px,80vw); text-align:center; letter-spacing:1px; }
 #nameGate button{ margin-top:18px; background:linear-gradient(180deg,#f0c169,var(--brass) 60%,#a67a2e); border:none; color:#1a1408; font-family:var(--font-display); font-weight:600; letter-spacing:2px; padding:12px 30px; cursor:pointer; }
 
+/* Экран "продолжить с места, где остановились" — тот же язык, что у nameGate */
+#resumeGate{ position:absolute; inset:0; background:#070908; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:41; padding:6vw; text-align:center; }
+#resumeGate.hide{ display:none; }
+#resumeGate h2{ font-family:var(--font-display); letter-spacing:4px; font-size:clamp(18px,3.6vw,24px); color:var(--paper); text-transform:uppercase; margin-bottom:8px; }
+#resumeGate p{ font-family:var(--font-mono); font-size:11px; letter-spacing:1.5px; color:var(--paint); margin-bottom:26px; }
+#resumeGate .resume-row{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+#resumeGate button{ font-family:var(--font-mono); font-size:12px; letter-spacing:1.5px; padding:11px 22px; cursor:pointer; text-transform:uppercase; }
+#resumeContinue{ background:linear-gradient(180deg,#f0c169,var(--brass) 60%,#a67a2e); border:none; color:#1a1408; font-weight:600; }
+#resumeRestart{ background:none; border:1px solid var(--panel-b,#2c3630); color:var(--paint); }
+#resumeRestart:hover{ color:var(--paper); border-color:var(--brass-dim); }
+
 /* Start screen */
 #startScreen{ position:absolute; inset:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:50; text-align:center; padding:6vw; }
 #startScreen.hide{ display:none; }
@@ -110,6 +121,18 @@ html,body{ margin:0; padding:0; width:100%; height:100%; background:#000; color:
 .puzzle .msg{ font-family:var(--font-mono); font-size:11px; letter-spacing:1px; margin-top:16px; min-height:16px; }
 .puzzle .msg.bad{ color:var(--warn); }
 .puzzle .msg.good{ color:#7fae7a; }
+
+/* Подсказка-ответ — специально мелкая и перевёрнутая, как в задачниках:
+   если совсем застряли, можно приглядеться (или перевернуть телефон). */
+.answer-peek{
+  position:absolute; bottom:10px; right:14px; max-width:60%;
+  font-family:var(--font-mono); font-size:9px; letter-spacing:.5px; line-height:1.5;
+  color:#3a4238; opacity:.65; text-align:right;
+  transform:rotate(180deg); pointer-events:none; user-select:text;
+}
+@media (max-width:640px){
+  .answer-peek{ font-size:8px; max-width:70%; bottom:8px; right:10px; }
+}
 .puzzle button.confirm{ margin-top:22px; background:linear-gradient(180deg,#f0c169,var(--brass) 60%,#a67a2e); border:none; color:#1a1408; font-family:var(--font-display); font-weight:600; letter-spacing:2px; padding:11px 26px; cursor:pointer; }
 
 /* Clock puzzle */

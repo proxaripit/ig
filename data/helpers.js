@@ -10,7 +10,7 @@ function ITEM(img,caption,collect){ return {type:'item', img, caption, collect: 
 // пригодится для сцен вроде "1998 → 2004 → 2017 → 2026" в главе 2.
 function FLOOR(num,glitch,label){ return {type:'floor', num:String(num), glitch: !!glitch, label: label||'ЭТАЖ'}; }
 function CHOICE(prompt,options){ return {type:'choice', prompt, options}; }
-function CLOCKPUZZLE(){ return {type:'clockpuzzle'}; }
+function CLOCKPUZZLE(hour,minute){ return {type:'clockpuzzle', hour: (hour===undefined?21:hour), minute: (minute===undefined?17:minute)}; }
 function FINDITEMS(){ return {type:'finditems'}; }
 function CODEENTRY(code){ return {type:'codeentry', code}; }
 // упорядоченная последовательность действий (пожарный щит в главе 2 и т.п.)
